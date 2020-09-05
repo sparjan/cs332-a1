@@ -29,6 +29,27 @@ imshow(brian, [])
 title('brian')
 figure, imshow(finger, [])
 
+function int = getMatch(image1, image2)
+% convert to double to enable floating-point calculation of average
+im1 = double(image1);
+im2 = double(image2);
+[xdim, ydim] = size(im2); % 240x256
+patch = zeros(20,20); % 20x20 patch 
+tempPatch = zeros(20,20);
+value = 1000;
+for row = 21:xdim-20 
+    for col = 21:ydim-20
+        tempPatch(row,col)= abs(im1(row,col)-im2(row,col));
+        tempValue = sum(patch);
+        if (tempValue < value)
+            value = tempValue;
+            patch = tempPatch;
+        end
+    end
+end
+int = value;
+end
+
 % determine how strong a match there is between the unknown partial print 
 % and the best-matching subregion of each known fingerprint image
 % takisMatch = getMatch(finger, takis);
