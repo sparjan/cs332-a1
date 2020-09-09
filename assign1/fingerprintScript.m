@@ -27,41 +27,34 @@ title('orit')
 subplot(2,2,4)
 imshow(brian, [])
 title('brian')
-figure, imshow(finger, [])
+% figure, imshow(finger, [])
 
-function int = getMatch(image1, image2)
-% convert to double to enable floating-point calculation of average
-im1 = double(image1);
-im2 = double(image2);
-[xdim, ydim] = size(im2); % 240x256
-patch = zeros(20,20); % 20x20 patch 
-tempPatch = zeros(20,20);
-value = 1000;
-for row = 21:xdim-20 
-    for col = 21:ydim-20
-        tempPatch(row,col)= abs(im1(row,col)-im2(row,col));
-        tempValue = sum(patch);
-        if (tempValue < value)
-            value = tempValue;
-            patch = tempPatch;
-        end
-    end
-end
-int = value;
-end
 
 % determine how strong a match there is between the unknown partial print 
 % and the best-matching subregion of each known fingerprint image
-% takisMatch = getMatch(finger, takis);
-% sohieMatch = getMatch(finger, sohie);
-% oritMatch = getMatch(finger, orit);
-% brianMatch = getMatch(finger, brian);
+ takisMatch = getMatch(finger, takis);
+ sohieMatch = getMatch(finger, sohie);
+ oritMatch = getMatch(finger, orit);
+ brianMatch = getMatch(finger, brian);
 
 % determine the culprit and print their identity - the names of the 
 % suspects are stored as strings inside a cell array that is created
 % and indexed using curly braces {}
-% matches = [takisMatch sohieMatch oritMatch brianMatch];
-% names = {'Takis' 'Sohie' 'Orit' 'Brian'};
-% [minv, mini] = min(matches);
-% disp(['Sadly, ' names{mini} ' is the culprit :(']);
+ matches = [takisMatch sohieMatch oritMatch brianMatch];
+ names = {'Takis' 'Sohie' 'Orit' 'Brian'};
+ [minv, mini] = min(matches);
+ disp(['Sadly, ' names{mini} ' is the culprit :(']);
 
+function value = getMatch(image1, image2)
+[xP, yP] = size(image1);
+[xdim, ydim] = size(image2);
+value = inf;
+for row = 1:(xdim-xP) 
+    for col = 1:(ydim-yP)
+        tempValue = sum(sum(abs(image1-image2(row:(row+xP-1),col:(col+yP-1)))));
+        if (tempValue < value)
+            value = tempValue;
+        end
+    end
+end
+end
