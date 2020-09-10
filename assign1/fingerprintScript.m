@@ -33,7 +33,7 @@ title('brian')
 % determine how strong a match there is between the unknown partial print 
 % and the best-matching subregion of each known fingerprint image
  takisMatch = getMatch(finger, takis);
- sohieMatch = getMatch(finger, sohie);
+ sohieMatch  = getMatch(finger, sohie);
  oritMatch = getMatch(finger, orit);
  brianMatch = getMatch(finger, brian);
 
@@ -45,6 +45,9 @@ title('brian')
  [minv, mini] = min(matches);
  disp(['Sadly, ' names{mini} ' is the culprit :(']);
 
+ % Return a number that quantifies the best match between the partial 
+ % fingerprint and the most similar patch of the full fingerprint image by
+ % measuring similiarity using the sum of absolute differences method
 function value = getMatch(image1, image2)
 [xP, yP] = size(image1);
 [xdim, ydim] = size(image2);
